@@ -21,7 +21,7 @@ pipeline {
         {
             steps {
                 sh 'mvn clean package'
-                echo hello $NAME ${params.$LASTNAME}
+                echo hello $NAME ${params.LASTNAME}
             }
 
             post {
