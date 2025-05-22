@@ -1,7 +1,6 @@
 pipeline {
-    agent any
-    options {
-        skipStagesAfterUnstable()
+    agent any{
+        label 'DevServer'
     }
     
     tools {
@@ -9,24 +8,17 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        
+        stage('Build') 
+        {
             steps {
-                sh 'mvn -B -DskipTests clean package'
+                sh 'mvn clean package'
             }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
+
             post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
+            success {
+                archiveArtifacts artifacts: '**/target/*.war'
                 }
-            }
-        }
-        stage('Deliver') { 
-            steps {
-                sh './jenkins/scripts/deliver.sh' 
             }
         }
     }
